@@ -78,22 +78,20 @@
         <i>Stopwatch</i>
         <v-card v-if="CLOCK.settings.show_stopwatch">
           <v-card-title>
-            <!-- <v-card-text>
+            <v-card-text>
               <br />
-              <span>{{ STOPWATCH.data.time }}</span>
+              <span>{{ STOPWATCH.time }}</span>
               <br />
               <v-btn
-                v-if="!STOPWATCH.data.isRunning"
-                @click="STOPWATCH.startStopwatch()"
+                @click="STOPWATCH.StartStopwatch()"
                 >Start</v-btn
               >
-              <v-btn
-                v-if="STOPWATCH.data.isRunning"
-                @click="STOPWATCH.stopStopwatch()"
+              <v-btn 
+                @click="STOPWATCH.StopStopwatch()"
                 >Stop</v-btn
               >
-              <v-btn @click="STOPWATCH.resetStopwatch()">Reset</v-btn>
-            </v-card-text> -->
+              <v-btn @click="STOPWATCH.ResetStopwatch()">Reset</v-btn>
+            </v-card-text>
           </v-card-title>
         </v-card>
       </v-col>

@@ -179,6 +179,60 @@ export const useCountdown = defineStore({
 
 export const useStopwatch = defineStore({
 	id: 'stopwatch',
-	state: () => ({}),
-	actions: {}
+	state: () => ({
+		time: '00:00:00.000',
+		time_began: null,
+		time_stopped: null,
+		stopped_duration: 0,
+		started: null,
+		running: false,
+	}),
+	actions: {
+		StartStopwatch() {
+			let that = this;
+			if(that.running) return;
+
+			if(that.time_began === null) {
+				that.ResetStopwatch();
+				that.time_began = new Date();
+			}
+
+			if(that.time_stopped !== null) {
+				that.stopped_duration += (new Date() - that.time_stopped);
+			}
+
+			that.started = setInterval(that.ClockRunning, 10);
+			that.running = true;
+		},
+		StopStopwatch() {
+			this.running = false;
+			this.time_stopped = new Date();
+			clearInterval(this.started);
+		},
+		ResetStopwatch() {
+			this.running = false;
+			clearInterval(this.started);
+			this.stopped_duration = 0;
+			this.time_began = null;
+			this.time_stopped = null;
+			this.time = '00:00:00.000';
+		},
+		ClockRunning() {
+			let current_time = new Date();
+			let time_elapsed = new Date(current_time - this.time_began - this.stopped_duration);
+			let hour = time_elapsed.getUTCHours();
+			let min = time_elapsed.getUTCMinutes();
+			let sec = time_elapsed.getUTCSeconds();
+			let ms = time_elapsed.getUTCMilliseconds();
+
+			this.time = this.zeroPrefix(hour, 2) + ':' + this.zeroPrefix(min, 2) + ':' + this.zeroPrefix(sec, 2) + '.' + this.zeroPrefix(ms, 3);
+		},
+		zeroPrefix(num, digit) {
+			let zero = '';
+			for(let i = 0; i < digit; i++) {
+				zero += '0';
+			}
+			return (zero + num).slice(-digit);
+		}
+	}
 })
