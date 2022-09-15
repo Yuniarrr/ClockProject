@@ -7,35 +7,51 @@
         </v-btn>
         <br />
         <i>Alarm</i>
-        <v-card v-if="CLOCK.settings.show_alarm" absolute top center>
-          <v-row>
-            <v-col>
-              <v-btn fab absolute top right @click="CLOCK.ShowAlarms()">
-                <!-- <v-icon> mdi-plus </v-icon> -->
-                <v-icon>mdi-close-thick</v-icon>
+        <br />
+        <span>{{ ALARM.time }}</span>
+        <br />
+        <v-card v-if="CLOCK.settings.show_alarm" class="mt-2">
+          <v-card-title class="mb-n3 mx-auto" align="center" justify="center">
+            <!-- <v-text-field
+              label="Alarm Time"
+              type="time"
+              prepend-icon="mdi-clock"
+              @change="ALARM.SetAlarm()"
+              class="mb-n3 alarm-time"
+            ></v-text-field> -->
+            <div align="center" justify="center">
+              <v-icon>mdi-clock</v-icon>
+              <input type="time" placeholder="Alarm Time" v-model="ALARM.time_save" class="alarm-time" />
+            </div>
+          </v-card-title>
+          <div class="mb-2">
+            <!-- <label for="satu" class="mb-1">
+              Alarm Time
+              <input
+                type="time"
+                id="satu"
+              />
+            </label> -->
+          </div>
+          <!-- <v-card-text class="mb-n3">
+            <v-text-field
+              v-model="ALARM.message"
+              label="Alarm Message"
+              prepend-icon="mdi-message"
+              @change="ALARM.SetAlarm()"
+            ></v-text-field>
+          </v-card-text> -->
+          <div>
+            <v-btn class="mb-3" @click="ALARM.alarm === 'Set Alarm' ? ALARM.SetAlarm() : ALARM.CancelAlarm()"> {{ALARM.alarm}} </v-btn>
+            <div v-if="ALARM.display">
+              <v-btn class="mx-1 mb-5" @click="ALARM.SnoozeAlarm()">
+                Snooze for 5s
               </v-btn>
-              <v-card-title>
-                <v-text-field
-                  v-model="CLOCK.AlarmTime"
-                  label="Alarm Time"
-                  type="time"
-                  step="1"
-                  prepend-icon="mdi-clock"
-                  @change="CLOCK.SetAlarm()"
-                ></v-text-field>
-              </v-card-title>
-              <v-card-text>
-                <v-text-field
-                  v-model="CLOCK.AlarmMessage"
-                  label="Alarm Message"
-                  prepend-icon="mdi-message"
-                  @change="CLOCK.SetAlarm()"
-                ></v-text-field>
-              </v-card-text>
-              <!-- </v-col>
-            <v-col> -->
-            </v-col>
-          </v-row>
+              <v-btn class="mx-1 mb-5" @click="ALARM.StopAlarm()">
+                Stop Alarm
+              </v-btn>
+            </div>
+          </div>
         </v-card>
       </v-col>
       <v-col>
@@ -44,7 +60,8 @@
         </v-btn>
         <br />
         <i>Time Countdown</i>
-        <v-card v-if="CLOCK.settings.show_countdown">
+        <br />
+        <v-card v-if="CLOCK.settings.show_countdown" class="mt-2">
           <v-card-title>
             <v-card-text>
               <br />
@@ -63,7 +80,8 @@
                         'is-active': time.sec === selectedTime && endTime !== 0,
                       },
                     ]"
-                  >{{ time.display }}</a>
+                    >{{ time.display }}</a
+                  >
                 </li>
               </ul>
             </v-card-text>
@@ -71,26 +89,26 @@
         </v-card>
       </v-col>
       <v-col>
-        <v-btn target="_blank" text class="mb-2">
-          <v-icon size="50" @click="CLOCK.ShowStopwatch()">mdi-timer</v-icon>
+        <v-btn target="_blank" text class="mb-2" @click="CLOCK.ShowStopwatch()">
+          <v-icon size="50">mdi-timer</v-icon>
         </v-btn>
         <br />
         <i>Stopwatch</i>
-        <v-card v-if="CLOCK.settings.show_stopwatch">
+        <br />
+        <v-card v-if="CLOCK.settings.show_stopwatch" class="mt-2">
           <v-card-title>
             <v-card-text>
-              <br />
               <span>{{ STOPWATCH.time }}</span>
               <br />
-              <v-btn
-                @click="STOPWATCH.StartStopwatch()"
+              <v-btn @click="STOPWATCH.StartStopwatch()" class="mx-1"
                 >Start</v-btn
               >
-              <v-btn 
-                @click="STOPWATCH.StopStopwatch()"
+              <v-btn @click="STOPWATCH.StopStopwatch()" class="mx-1"
                 >Stop</v-btn
               >
-              <v-btn @click="STOPWATCH.ResetStopwatch()">Reset</v-btn>
+              <v-btn @click="STOPWATCH.ResetStopwatch()" class="mx-1 my-1"
+                >Reset</v-btn
+              >
             </v-card-text>
           </v-card-title>
         </v-card>
@@ -100,24 +118,30 @@
 </template>
 
 <script>
-import { useClock, useCountdown, useStopwatch } from "@/store/index.js";
+import {
+  useClock,
+  useCountdown,
+  useStopwatch,
+  useAlarm,
+} from "@/store/index.js";
 
 export default {
   setup() {
     const CLOCK = useClock();
     const COUNTDOWN = useCountdown();
     const STOPWATCH = useStopwatch();
+    const ALARM = useAlarm();
     return {
       CLOCK,
       COUNTDOWN,
       STOPWATCH,
+      ALARM,
     };
   },
   created() {
     setInterval(() => {
       // this.COUNTDOWN.StartCountdown();
       // this.COUNTDOWN.countdown();
-
     }, 1000);
   },
 };

@@ -7,12 +7,17 @@ export const useClock = defineStore({
 		data: {
 			date: "",
 			time: "",
+			fontSize: 4,
 		},
 		settings: {
 			show_settings: false,
 			font_size: "medium",
 			clock_style: "digital",
+			time_format: "1",
+			date_format: "satu",
 			show_alarm: false,
+			date_format: "satu",
+			img: "use",
 			show_countdown: false,
 			show_stopwatch: false,
 		},
@@ -47,10 +52,21 @@ export const useClock = defineStore({
 					day = "Hari";
 					break;
 			}
-			return day + moment().format(", D MMMM YYYY");
+			if (this.settings.date_format == "satu") {
+				return day + moment().format(`, D MMMM YYYY`);
+			} else if (this.settings.date_format == "dua") {
+				return day + moment().format(`, MMMM D YYYY`);
+			} else if (this.settings.date_format == "tiga") {
+				return day + moment().format(`, YYYY MMMM D`);
+			}
+			// return (day, "\n", moment().format(`D MMMM YYYY`));
 		},
 		CurrentTime() {
-			return moment().format("h:mm:ss");
+			if (this.settings.time_format == "1") {
+				return moment().format("h:mm:ss a");
+			} else {
+				return moment().format("HH:mm:ss");
+			}
 		},
 		ChangeFontSize() {
 			// console.log(this.settings.font_size);
@@ -87,6 +103,60 @@ export const useClock = defineStore({
 		},
 		ShowStopwatch() {
 			return (this.settings.show_stopwatch = !this.settings.show_stopwatch);
+		},
+		ChangeTimeFormat() {
+			switch (this.settings.time_format) {
+				case "1":
+					this.settings.time_format = "1";
+					break;
+
+				case "2":
+					this.settings.time_format = "2";
+					break;
+
+				default:
+					this.settings.time_format = "1";
+					break;
+			}
+		},
+		ChangeDateFormat() {
+			console.log("date format changed");
+			console.log(this.settings.date_format);
+			switch (this.settings.date_format) {
+				case "satu":
+					this.settings.date_format = "satu";
+					break;
+
+				case "dua":
+					this.settings.date_format = "dua";
+					break;
+
+				case "tiga":
+					this.settings.date_format = "tiga";
+					break;
+
+				default:
+					break;
+			}
+		},
+		ChangeFontSize() {
+			switch (this.settings.font_size) {
+				case "small":
+					this.data.fontSize = 2;
+					break;
+
+				case "medium":
+					this.data.fontSize = 4;
+					break;
+
+				case "large":
+					this.data.fontSize = 6;
+					break;
+
+				default:
+					this.settings.font_size = 4;
+					break;
+			}
 		},
 	},
 });
@@ -178,9 +248,9 @@ export const useCountdown = defineStore({
 });
 
 export const useStopwatch = defineStore({
-	id: 'stopwatch',
+	id: "stopwatch",
 	state: () => ({
-		time: '00:00:00.000',
+		time: "00:00:00.000",
 		time_began: null,
 		time_stopped: null,
 		stopped_duration: 0,
@@ -190,15 +260,15 @@ export const useStopwatch = defineStore({
 	actions: {
 		StartStopwatch() {
 			let that = this;
-			if(that.running) return;
+			if (that.running) return;
 
-			if(that.time_began === null) {
+			if (that.time_began === null) {
 				that.ResetStopwatch();
 				that.time_began = new Date();
 			}
 
-			if(that.time_stopped !== null) {
-				that.stopped_duration += (new Date() - that.time_stopped);
+			if (that.time_stopped !== null) {
+				that.stopped_duration += new Date() - that.time_stopped;
 			}
 
 			that.started = setInterval(that.ClockRunning, 10);
@@ -215,24 +285,101 @@ export const useStopwatch = defineStore({
 			this.stopped_duration = 0;
 			this.time_began = null;
 			this.time_stopped = null;
-			this.time = '00:00:00.000';
+			this.time = "00:00:00.000";
 		},
 		ClockRunning() {
 			let current_time = new Date();
-			let time_elapsed = new Date(current_time - this.time_began - this.stopped_duration);
+			let time_elapsed = new Date(
+				current_time - this.time_began - this.stopped_duration
+			);
 			let hour = time_elapsed.getUTCHours();
 			let min = time_elapsed.getUTCMinutes();
 			let sec = time_elapsed.getUTCSeconds();
 			let ms = time_elapsed.getUTCMilliseconds();
 
-			this.time = this.zeroPrefix(hour, 2) + ':' + this.zeroPrefix(min, 2) + ':' + this.zeroPrefix(sec, 2) + '.' + this.zeroPrefix(ms, 3);
+			this.time =
+				this.zeroPrefix(hour, 2) +
+				":" +
+				this.zeroPrefix(min, 2) +
+				":" +
+				this.zeroPrefix(sec, 2) +
+				"." +
+				this.zeroPrefix(ms, 3);
 		},
 		zeroPrefix(num, digit) {
-			let zero = '';
-			for(let i = 0; i < digit; i++) {
-				zero += '0';
+			let zero = "";
+			for (let i = 0; i < digit; i++) {
+				zero += "0";
 			}
 			return (zero + num).slice(-digit);
-		}
-	}
-})
+		},
+	},
+});
+
+export const useAlarm = defineStore({
+	id: "alarm",
+	state: () => ({
+		sound: new Audio(
+			"https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"
+		),
+		timer: null,
+		display: false,
+		alarm: "Set Alarm",
+		time_save: 0,
+	}),
+	actions: {
+		AlarmDisplay() {
+			return (this.display = !this.display);
+		},
+		SetAlarm() {
+			let time = this.time_save;
+			console.log(`time: ${time}`);
+			let ms = new Date().setHours(0, 0, 0, 0) + parseInt(time);
+			console.log(`setHours: ${new Date.setHours(0, 0, 0, 0)}`);
+			console.log(`ms: ${ms}`);
+
+			if (isNaN(ms)) {
+				alert("You've got to give me something to work with here, friend.");
+				return;
+			}
+
+			let alarm = new Date(ms);
+			var dt = new Date().getTime();
+			console.log(`dt: ${dt}`);
+			let differenceInMs = alarm.getTime() - dt;
+			console.log(`diff: ${differenceInMs}`);
+
+			if (differenceInMs < 0) {
+				alert(
+					"It looks like that's a date from the past! Are you a time traveler?!"
+				);
+				return;
+			}
+			this.display = !this.display;
+			this.alarm = "Cancel Alarm";
+			this.timer = setTimeout(() => {
+				this.InitAlarm()
+			}, differenceInMs);
+		},
+		CancelAlarm() {
+			clearTimeout(this.timer);
+			this.alarm = "Set Alarm";
+			this.display = !this.display;
+			// alarmButton.innerText = "Set Alarm";
+			// alarmButton.setAttribute("onclick", "setAlarm(this);");
+			// options.style.display = "none";
+		},
+		InitAlarm() {
+			this.sound.play();
+			this.sound.loop = true;
+		},
+		StopAlarm() {
+			this.sound.pause();
+			this.sound.currentTime = 0;
+		},
+		SnoozeAlarm() {
+			this.StopAlarm();
+			setTimeout(this.InitAlarm, 5000);
+		},
+	},
+});

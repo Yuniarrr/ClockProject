@@ -12,11 +12,8 @@
     </div>
     <div class="text-overline mb-4">
       <span
-        style="font-size: 4rem"
         :style="{
-          'font-size: 2rem': CLOCK.settings.font_size === 'small',
-          'font-size: 4rem': CLOCK.settings.font_size === 'medium',
-          'font-size: 6rem': CLOCK.settings.font_size === 'large',
+          'font-size': CLOCK.data.fontSize + 'rem',
         }"
         >{{ CLOCK.data.time }}</span
       >
@@ -35,11 +32,9 @@ export default {
     };
   },
   created() {
-    setInterval(() => {
-      let that = this.CLOCK;
-      that.data.date = that.CurrentDate();
-      that.data.time = that.CurrentTime();
-    }, 1000);
-  },
+    // setInterval(() => {
+    //   this.CLOCK.ChangeDateFormat();
+    // }, 1000);
+  }
 };
 </script>

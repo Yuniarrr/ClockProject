@@ -29,7 +29,6 @@
 </template>
 
 <script>
-import moment from "moment";
 import MoreWidget from "./MoreWidget.vue";
 import DigitalWidget from "./DigitalWidget.vue";
 import AnalogWidget from "./AnalogWidget.vue";
