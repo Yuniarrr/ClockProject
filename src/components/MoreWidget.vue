@@ -12,37 +12,26 @@
         <br />
         <v-card v-if="CLOCK.settings.show_alarm" class="mt-2">
           <v-card-title class="mb-n3 mx-auto" align="center" justify="center">
-            <!-- <v-text-field
+            <v-text-field
               label="Alarm Time"
               type="time"
               prepend-icon="mdi-clock"
-              @change="ALARM.SetAlarm()"
-              class="mb-n3 alarm-time"
-            ></v-text-field> -->
-            <div align="center" justify="center">
-              <v-icon>mdi-clock</v-icon>
-              <input type="time" placeholder="Alarm Time" v-model="ALARM.time_save" class="alarm-time" />
-            </div>
-          </v-card-title>
-          <div class="mb-2">
-            <!-- <label for="satu" class="mb-1">
-              Alarm Time
-              <input
-                type="time"
-                id="satu"
-              />
-            </label> -->
-          </div>
-          <!-- <v-card-text class="mb-n3">
-            <v-text-field
-              v-model="ALARM.message"
-              label="Alarm Message"
-              prepend-icon="mdi-message"
-              @change="ALARM.SetAlarm()"
+              class="mb-n3"
+              id="alarmTime"
+              v-model="ALARM.time_save"
             ></v-text-field>
-          </v-card-text> -->
+          </v-card-title>
           <div>
-            <v-btn class="mb-3" @click="ALARM.alarm === 'Set Alarm' ? ALARM.SetAlarm() : ALARM.CancelAlarm()"> {{ALARM.alarm}} </v-btn>
+            <v-btn
+              class="mb-3"
+              @click="
+                ALARM.alarm === 'Set Alarm'
+                  ? ALARM.SetAlarm()
+                  : ALARM.CancelAlarm()
+              "
+            >
+              {{ ALARM.alarm }}
+            </v-btn>
             <div v-if="ALARM.display">
               <v-btn class="mx-1 mb-5" @click="ALARM.SnoozeAlarm()">
                 Snooze for 5s
@@ -137,12 +126,6 @@ export default {
       STOPWATCH,
       ALARM,
     };
-  },
-  created() {
-    setInterval(() => {
-      // this.COUNTDOWN.StartCountdown();
-      // this.COUNTDOWN.countdown();
-    }, 1000);
   },
 };
 </script>

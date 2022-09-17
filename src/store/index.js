@@ -326,28 +326,21 @@ export const useAlarm = defineStore({
 		display: false,
 		alarm: "Set Alarm",
 		time_save: 0,
+		timeTag: "",
 	}),
 	actions: {
 		AlarmDisplay() {
 			return (this.display = !this.display);
 		},
 		SetAlarm() {
-			let time = this.time_save;
-			console.log(`time: ${time}`);
-			let ms = new Date().setHours(0, 0, 0, 0) + parseInt(time);
-			console.log(`setHours: ${new Date.setHours(0, 0, 0, 0)}`);
-			console.log(`ms: ${ms}`);
-
+			let ms = new Date().setHours(0, 0, 0, 0) + this.time_save.slice(0, 2) * 3600000 + this.time_save.slice(3, 5) * 60000;
 			if (isNaN(ms)) {
 				alert("You've got to give me something to work with here, friend.");
 				return;
 			}
-
 			let alarm = new Date(ms);
 			var dt = new Date().getTime();
-			console.log(`dt: ${dt}`);
 			let differenceInMs = alarm.getTime() - dt;
-			console.log(`diff: ${differenceInMs}`);
 
 			if (differenceInMs < 0) {
 				alert(
@@ -355,19 +348,16 @@ export const useAlarm = defineStore({
 				);
 				return;
 			}
-			this.display = !this.display;
-			this.alarm = "Cancel Alarm";
 			this.timer = setTimeout(() => {
-				this.InitAlarm()
+				this.InitAlarm();
 			}, differenceInMs);
+			this.display = true;
+			this.alarm = "Cancel Alarm";
 		},
 		CancelAlarm() {
 			clearTimeout(this.timer);
 			this.alarm = "Set Alarm";
-			this.display = !this.display;
-			// alarmButton.innerText = "Set Alarm";
-			// alarmButton.setAttribute("onclick", "setAlarm(this);");
-			// options.style.display = "none";
+			this.display = false;
 		},
 		InitAlarm() {
 			this.sound.play();
@@ -376,10 +366,17 @@ export const useAlarm = defineStore({
 		StopAlarm() {
 			this.sound.pause();
 			this.sound.currentTime = 0;
+			this.sound.loop = false;
+			this.display = false;
+			this.alarm = "Set Alarm";
 		},
 		SnoozeAlarm() {
-			this.StopAlarm();
-			setTimeout(this.InitAlarm, 5000);
+			this.sound.loop = false;
+			this.sound.pause();
+			this.sound.currentTime = 0;
+			this.timer = setTimeout(() => {
+				this.InitAlarm();
+			}, 5000);
 		},
 	},
 });
