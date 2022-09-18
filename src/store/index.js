@@ -20,6 +20,8 @@ export const useClock = defineStore({
 			img: "use",
 			show_countdown: false,
 			show_stopwatch: false,
+			color: "black",
+			day: "yes",
 		},
 	}),
 	getters: {},
@@ -52,14 +54,24 @@ export const useClock = defineStore({
 					day = "Hari";
 					break;
 			}
-			if (this.settings.date_format == "satu") {
-				return day + moment().format(`, D MMMM YYYY`);
-			} else if (this.settings.date_format == "dua") {
-				return day + moment().format(`, MMMM D YYYY`);
-			} else if (this.settings.date_format == "tiga") {
-				return day + moment().format(`, YYYY MMMM D`);
+			const SETTINGS = this.settings;
+			if (SETTINGS.day == "yes") {
+				if (SETTINGS.date_format == "satu") {
+					return day + moment().format(`, D MMMM YYYY`);
+				} else if (SETTINGS.date_format == "dua") {
+					return day + moment().format(`, MMMM D YYYY`);
+				} else if (SETTINGS.date_format == "tiga") {
+					return day + moment().format(`, YYYY MMMM D`);
+				}
+			} else {
+				if (SETTINGS.date_format == "satu") {
+					return moment().format(`D MMMM YYYY`);
+				} else if (SETTINGS.date_format == "dua") {
+					return moment().format(`MMMM D YYYY`);
+				} else if (SETTINGS.date_format == "tiga") {
+					return moment().format(`YYYY MMMM D`);
+				}
 			}
-			// return (day, "\n", moment().format(`D MMMM YYYY`));
 		},
 		CurrentTime() {
 			if (this.settings.time_format == "1") {
@@ -69,7 +81,6 @@ export const useClock = defineStore({
 			}
 		},
 		ChangeFontSize() {
-			// console.log(this.settings.font_size);
 			switch (this.settings.font_size) {
 				case "small":
 					this.settings.font_size = "small";
@@ -88,14 +99,10 @@ export const useClock = defineStore({
 					break;
 			}
 		},
-		ChangeClockStyle() {
-			console.log(this.settings.clock_style);
-		},
 		ToggleSettings() {
 			return (this.settings.show_settings = !this.settings.show_settings);
 		},
 		ShowAlarms() {
-			console.log(this.settings.show_alarm);
 			return (this.settings.show_alarm = !this.settings.show_alarm);
 		},
 		ShowCountdown() {
@@ -120,8 +127,6 @@ export const useClock = defineStore({
 			}
 		},
 		ChangeDateFormat() {
-			console.log("date format changed");
-			console.log(this.settings.date_format);
 			switch (this.settings.date_format) {
 				case "satu":
 					this.settings.date_format = "satu";
@@ -178,17 +183,19 @@ export const useCountdown = defineStore({
 					display: "10m",
 				},
 				{
-					sec: 1800,
-					display: "30m",
+					sec: 1500,
+					display: "25m",
 				},
 			],
 		},
 		intervalTimer: null,
+		sound: new Audio(
+			"https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"
+		),
 	}),
 	getters: {},
 	actions: {
 		setTime(seconds) {
-			// var intervalTimer;
 			clearInterval(this.intervalTimer);
 			this.timer(seconds);
 		},
@@ -198,31 +205,33 @@ export const useCountdown = defineStore({
 			this.displayTimeLeft(seconds);
 
 			this.data.selectedTime = seconds;
-			// this.initialTime = seconds;
 			this.displayEndTime(end);
 			this.countdown(end);
 		},
 		countdown(end) {
-			// this.initialTime = this.selectedTime;
 			let that = this;
-			that.intervalTimer = setInterval(() => {
-				const secondsLeft = Math.round((end - Date.now()) / 1000);
+			if (this.endTime != 0 || this.selectedTime != 0) {
+				that.intervalTimer = setInterval(() => {
+					const secondsLeft = Math.round((end - Date.now()) / 1000);
 
-				if (secondsLeft === 0) {
-					that.data.endTime = 0;
-				}
+					if (secondsLeft === 0) {
+						that.data.endTime = 0;
+					}
 
-				if (secondsLeft < 0) {
-					clearInterval(that.intervalTimer);
-					return;
-				}
-				that.displayTimeLeft(secondsLeft);
-			}, 1000);
+					if (secondsLeft < 0) {
+						clearInterval(that.intervalTimer);
+						return;
+					}
+					that.displayTimeLeft(secondsLeft);
+				}, 1000);
+				setTimeout(() => {
+					that.initSound();
+				}, this.data.selectedTime * 1000);
+			}
 		},
 		displayTimeLeft(secondsLeft) {
 			const minutes = Math.floor((secondsLeft % 3600) / 60);
 			const seconds = secondsLeft % 60;
-
 			let zeroM = this.zeroPadded(minutes);
 			let zeroS = this.zeroPadded(seconds);
 			this.data.timeLeft = `${zeroM}:${zeroS}`;
@@ -231,18 +240,27 @@ export const useCountdown = defineStore({
 			const end = new Date(timestamp);
 			const hour = end.getHours();
 			const minutes = end.getMinutes();
-
 			let hourH = this.hourConvert(hour);
 			let zeroM = this.zeroPadded(minutes);
 			this.data.endTime = `${hourH}:${zeroM}`;
 		},
 		zeroPadded(num) {
-			// 4 --> 04
 			return num < 10 ? `0${num}` : num;
 		},
 		hourConvert(hour) {
-			// 15 --> 3
 			return hour % 12 || 12;
+		},
+		initSound() {
+			this.sound.play();
+			this.sound.loop = true;
+		},
+		stopCountDown() {
+			clearInterval(this.intervalTimer);
+			this.data.timeLeft = "00:00";
+			this.data.endTime = 0;
+			this.data.selectedTime = 0;
+			this.sound.pause();
+			this.sound.loop = false;
 		},
 	},
 });
@@ -256,6 +274,7 @@ export const useStopwatch = defineStore({
 		stopped_duration: 0,
 		started: null,
 		running: false,
+		rounds: [],
 	}),
 	actions: {
 		StartStopwatch() {
@@ -286,6 +305,7 @@ export const useStopwatch = defineStore({
 			this.time_began = null;
 			this.time_stopped = null;
 			this.time = "00:00:00.000";
+			this.rounds = [];
 		},
 		ClockRunning() {
 			let current_time = new Date();
@@ -313,6 +333,9 @@ export const useStopwatch = defineStore({
 			}
 			return (zero + num).slice(-digit);
 		},
+		RoundStopwatch() {
+			this.rounds.push(this.time);
+		},
 	},
 });
 
@@ -327,13 +350,17 @@ export const useAlarm = defineStore({
 		alarm: "Set Alarm",
 		time_save: 0,
 		timeTag: "",
+		message: "",
 	}),
 	actions: {
 		AlarmDisplay() {
 			return (this.display = !this.display);
 		},
 		SetAlarm() {
-			let ms = new Date().setHours(0, 0, 0, 0) + this.time_save.slice(0, 2) * 3600000 + this.time_save.slice(3, 5) * 60000;
+			let ms =
+				new Date().setHours(0, 0, 0, 0) +
+				this.time_save.slice(0, 2) * 3600000 +
+				this.time_save.slice(3, 5) * 60000;
 			if (isNaN(ms)) {
 				alert("You've got to give me something to work with here, friend.");
 				return;
@@ -365,8 +392,8 @@ export const useAlarm = defineStore({
 		},
 		StopAlarm() {
 			this.sound.pause();
-			this.sound.currentTime = 0;
 			this.sound.loop = false;
+			this.sound.currentTime = 0;
 			this.display = false;
 			this.alarm = "Set Alarm";
 		},

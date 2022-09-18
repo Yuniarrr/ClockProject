@@ -2,12 +2,11 @@
   <v-container>
     <v-row xs="6" sm="6" md="6">
       <v-col>
-        <v-btn target="_blank" text class="mb-2" @click="CLOCK.ShowAlarms()">
+        <v-btn target="_blank" text class="mb-2" large @click="CLOCK.ShowAlarms()">
           <v-icon size="50">mdi-clock</v-icon>
         </v-btn>
         <br />
         <i>Alarm</i>
-        <br />
         <span>{{ ALARM.time }}</span>
         <br />
         <v-card v-if="CLOCK.settings.show_alarm" class="mt-2">
@@ -20,14 +19,19 @@
               id="alarmTime"
               v-model="ALARM.time_save"
             ></v-text-field>
+            <v-text-field
+              label="Alarm Message"
+              type="text"
+              prepend-icon="mdi-message-text"
+              class="mb-n3"
+              v-model="ALARM.message"
+            ></v-text-field>
           </v-card-title>
           <div>
             <v-btn
               class="mb-3"
               @click="
-                ALARM.alarm === 'Set Alarm'
-                  ? ALARM.SetAlarm()
-                  : ALARM.CancelAlarm()
+                ALARM.alarm === 'Set Alarm' ? ALARM.SetAlarm() : ALARM.CancelAlarm()
               "
             >
               {{ ALARM.alarm }}
@@ -36,15 +40,13 @@
               <v-btn class="mx-1 mb-5" @click="ALARM.SnoozeAlarm()">
                 Snooze for 5s
               </v-btn>
-              <v-btn class="mx-1 mb-5" @click="ALARM.StopAlarm()">
-                Stop Alarm
-              </v-btn>
+              <v-btn class="mx-1 mb-5" @click="ALARM.StopAlarm()"> Stop Alarm </v-btn>
             </div>
           </div>
         </v-card>
       </v-col>
       <v-col>
-        <v-btn target="_blank" text class="mb-2" @click="CLOCK.ShowCountdown()">
+        <v-btn target="_blank" text class="mb-2" @click="CLOCK.ShowCountdown()" large>
           <v-icon size="50">mdi-counter</v-icon>
         </v-btn>
         <br />
@@ -53,13 +55,18 @@
         <v-card v-if="CLOCK.settings.show_countdown" class="mt-2">
           <v-card-title>
             <v-card-text>
-              <br />
-              <span>{{ COUNTDOWN.data.timeLeft }}</span>
-              <br />
+              <span class="text-subtitle-1">{{ COUNTDOWN.data.timeLeft }}</span>
+              <div v-if="COUNTDOWN.data.selectedTime != 0">
+                <v-btn x-small @click="COUNTDOWN.stopCountDown()">STOP</v-btn>
+              </div>
               Countdown ends at <span>{{ COUNTDOWN.data.endTime }}</span>
               <br />
               <ul>
-                <li v-for="(time, index) in COUNTDOWN.data.times" :key="index">
+                <li
+                  v-for="(time, index) in COUNTDOWN.data.times"
+                  :key="index"
+                  style="list-style-type: none"
+                >
                   <a
                     v-on:click.prevent="COUNTDOWN.setTime(time.sec)"
                     :class="[
@@ -78,26 +85,30 @@
         </v-card>
       </v-col>
       <v-col>
-        <v-btn target="_blank" text class="mb-2" @click="CLOCK.ShowStopwatch()">
+        <v-btn target="_blank" text class="mb-2" @click="CLOCK.ShowStopwatch()" large>
           <v-icon size="50">mdi-timer</v-icon>
         </v-btn>
         <br />
         <i>Stopwatch</i>
-        <br />
         <v-card v-if="CLOCK.settings.show_stopwatch" class="mt-2">
           <v-card-title>
             <v-card-text>
               <span>{{ STOPWATCH.time }}</span>
               <br />
-              <v-btn @click="STOPWATCH.StartStopwatch()" class="mx-1"
-                >Start</v-btn
+              <v-btn @click="STOPWATCH.StartStopwatch()" class="mx-1">Start</v-btn>
+              <v-btn @click="STOPWATCH.StopStopwatch()" class="mx-1">Stop</v-btn>
+              <v-btn @click="STOPWATCH.ResetStopwatch()" class="mx-1 my-1">Reset</v-btn>
+              <v-btn @click="STOPWATCH.RoundStopwatch()" class="mx-1 my-1">Round</v-btn>
+              <ul
+                v-if="STOPWATCH.rounds != 0"
+                class="mt-2"
+                style="list-style-type: circle"
+                center
               >
-              <v-btn @click="STOPWATCH.StopStopwatch()" class="mx-1"
-                >Stop</v-btn
-              >
-              <v-btn @click="STOPWATCH.ResetStopwatch()" class="mx-1 my-1"
-                >Reset</v-btn
-              >
+                <li v-for="(round, index) in STOPWATCH.rounds" :key="index">
+                  {{ round }}
+                </li>
+              </ul>
             </v-card-text>
           </v-card-title>
         </v-card>
@@ -107,12 +118,7 @@
 </template>
 
 <script>
-import {
-  useClock,
-  useCountdown,
-  useStopwatch,
-  useAlarm,
-} from "@/store/index.js";
+import { useClock, useCountdown, useStopwatch, useAlarm } from "@/store/index.js";
 
 export default {
   setup() {

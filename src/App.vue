@@ -40,14 +40,12 @@
     </div>
       <div width="100%">
         <div class="float-end mt-16" width="50%">
-          <!-- <ejs-sidebar> -->
           <div>
             <ClockSettings
               v-if="CLOCK.settings.show_settings"
               class="pl-3 ml-3"
               style="opacity: 0.9;"
             />
-            <!-- </ejs-sidebar> -->
           </div>
         </div>
         <v-main>

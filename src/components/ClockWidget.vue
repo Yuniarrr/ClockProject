@@ -14,11 +14,20 @@
           <v-list-item>
             <v-list-item-content>
               <div class="mx-auto my-auto mb-n3">
-                <DigitalWidget v-if="CLOCK.settings.clock_style === 'digital'" />
+                <DigitalWidget
+                  v-if="CLOCK.settings.clock_style === 'digital'"
+                />
                 <AnalogWidget class="mb-3" v-else />
               </div>
               <div>
-                <MoreWidget />
+                <MoreWidget
+                  class="overflow-auto"
+                  style="
+                    position: relative;
+                    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
+                      0 6px 20px 0 rgba(0, 0, 0, 0.19);
+                  "
+                />
               </div>
             </v-list-item-content>
           </v-list-item>
@@ -48,10 +57,10 @@ export default {
       that.data.time = that.CurrentTime();
     }, 1000);
   },
-  components: { 
+  components: {
     MoreWidget,
     DigitalWidget,
-    AnalogWidget
+    AnalogWidget,
   },
 };
 </script>

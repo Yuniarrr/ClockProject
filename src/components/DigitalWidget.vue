@@ -31,10 +31,5 @@ export default {
       CLOCK,
     };
   },
-  created() {
-    // setInterval(() => {
-    //   this.CLOCK.ChangeDateFormat();
-    // }, 1000);
-  }
 };
 </script>

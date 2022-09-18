@@ -1,5 +1,12 @@
 <template>
-  <v-sheet height="100%" class="overflow-auto" style="position: relative">
+  <v-sheet
+    height="100%"
+    class="overflow-auto"
+    style="
+      position: relative;
+      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    "
+  >
     <v-list dense class="mb-n7">
       <v-list-item-content>
         <v-list-item-title class="mb-n3">Font Size</v-list-item-title>
@@ -42,9 +49,22 @@
 
     <v-list dense class="mb-n7">
       <v-list-item-content>
-        <v-list-item-title class="mb-n2">
-          Change Clock Style
-        </v-list-item-title>
+        <div class="mt-n6">
+          <v-checkbox
+            label="With Day"
+            style="color: black"
+            v-model="CLOCK.settings.day"
+            value="yes"
+          ></v-checkbox>
+        </div>
+      </v-list-item-content>
+    </v-list>
+
+    <v-divider></v-divider>
+
+    <v-list dense class="mb-n7">
+      <v-list-item-content>
+        <v-list-item-title class="mb-n2"> Change Clock Style </v-list-item-title>
         <div>
           <v-radio-group col>
             <label for="analog" class="mb-1">
@@ -53,7 +73,6 @@
                 id="analog"
                 value="analog"
                 v-model="CLOCK.settings.clock_style"
-                @change="CLOCK.ChangeClockStyle()"
               />
               Analog
             </label>
@@ -63,7 +82,6 @@
                 id="digital"
                 value="digital"
                 v-model="CLOCK.settings.clock_style"
-                @change="CLOCK.ChangeClockStyle()"
               />
               Digital
             </label>
@@ -76,9 +94,7 @@
 
     <v-list dense class="mb-n7">
       <v-list-item-content>
-        <v-list-item-title class="mb-n2">
-          Change Date Format
-        </v-list-item-title>
+        <v-list-item-title class="mb-n2"> Change Date Format </v-list-item-title>
         <div>
           <v-radio-group col>
             <label for="satu" class="mb-1">
@@ -118,11 +134,9 @@
 
     <v-divider></v-divider>
 
-    <v-list dense class="mb-4">
+    <v-list dense>
       <v-list-item-content>
-        <v-list-item-title class="mb-n2">
-          Change Time Format
-        </v-list-item-title>
+        <v-list-item-title class="mb-n2"> Change Time Format </v-list-item-title>
         <div>
           <v-radio-group col>
             <label for="duaBelas" class="mb-1">
