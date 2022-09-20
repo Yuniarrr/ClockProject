@@ -1,6 +1,8 @@
 # HOW TO RUN THIS PROJECT
 project: clock-project
+...
 nama: Midyanisa Yuniar
+...
 NRP: 5027211025
 
 ## Project setup
