@@ -1,4 +1,7 @@
-# clock-project
+# HOW TO RUN THIS PROJECT
+project: clock-project ||
+nama: Midyanisa Yuniar ||
+NRP: 5027211025
 
 ## Project setup
 ```
@@ -8,11 +11,6 @@ npm install
 ### Compiles and hot-reloads for development
 ```
 npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
 ```
 
 ### Customize configuration
