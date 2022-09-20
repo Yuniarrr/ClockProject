@@ -1,27 +1,22 @@
 <template>
-  <v-app :class="{
-    'imageBackground': CLOCK.settings.img == 'use'
-  }">
-  <span class="bg"></span>
+  <v-app
+    :class="{
+      imageBackground: CLOCK.settings.img == 'use',
+    }"
+  >
+    <span class="bg"></span>
     <div>
       <v-app-bar app color="primary" dark>
         <div class="d-flex align-center">
-          <v-icon
-            class="shrink mr-2 mt-1"
-            transition="scale-transition"
-            width="40"
+          <v-icon class="shrink mr-2 mt-1" transition="scale-transition" width="40"
             >mdi-clock-digital</v-icon
           >
           <span
             class="hidden-sm-and-down font-weight-light shrink mt-1"
             contain
             width="100"
-            >Project Clock With Vue JS</span
+            >Project Clock With Vue JS || Midyanisa Yuniar</span
           >
-          <!-- <nav>
-          <router-link to="/" style="text-decoration: none;">Home</router-link> |
-          <router-link to="/about">About</router-link>
-        </nav> -->
         </div>
 
         <v-spacer></v-spacer>
@@ -38,21 +33,22 @@
         </v-btn>
       </v-app-bar>
     </div>
-      <div width="100%">
-        <div class="float-end mt-16" width="50%">
-          <div>
-            <ClockSettings
-              v-if="CLOCK.settings.show_settings"
-              class="pl-3 ml-3"
-              style="opacity: 0.9;"
-            />
-          </div>
+    <div width="100%">
+      <div class="float-end mt-16" width="50%">
+        <div>
+          <ClockSettings
+            v-if="CLOCK.settings.show_settings"
+            class="pl-3 ml-3"
+            style="opacity: 0.9"
+          />
         </div>
-        <v-main>
-          <router-view />
-        </v-main>
       </div>
-      <!-- <v-overlay
+      <v-main>
+        <router-view />
+      </v-main>
+      <PopUpAlarm />
+    </div>
+    <!-- <v-overlay
         :opacity="opacity"
         :absolute="absolute"
         :value="overlay"
@@ -62,6 +58,7 @@
 
 <script>
 import ClockSettings from "./components/ClockSettings.vue";
+import PopUpAlarm from "./components/PopUpAlarm.vue";
 import { useClock } from "./store/index.js";
 
 export default {
@@ -83,6 +80,7 @@ export default {
   },
   components: {
     ClockSettings,
+    PopUpAlarm,
   },
   methods: {
     DarkMode() {

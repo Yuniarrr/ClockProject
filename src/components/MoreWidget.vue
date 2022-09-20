@@ -59,6 +59,7 @@
               <div v-if="COUNTDOWN.data.selectedTime != 0">
                 <v-btn x-small @click="COUNTDOWN.stopCountDown()">STOP</v-btn>
               </div>
+              <br />
               Countdown ends at <span>{{ COUNTDOWN.data.endTime }}</span>
               <br />
               <ul>
@@ -73,7 +74,9 @@
                       'button',
                       'is-link',
                       {
-                        'is-active': time.sec === selectedTime && endTime !== 0,
+                        'is-active':
+                          time.sec === COUNTDOWN.data.selectedTime &&
+                          COUNTDOWN.data.endTime !== 0,
                       },
                     ]"
                     >{{ time.display }}</a

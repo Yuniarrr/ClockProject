@@ -192,6 +192,7 @@ export const useCountdown = defineStore({
 		sound: new Audio(
 			"https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"
 		),
+		showMessage: false,
 	}),
 	getters: {},
 	actions: {
@@ -226,6 +227,7 @@ export const useCountdown = defineStore({
 				}, 1000);
 				setTimeout(() => {
 					that.initSound();
+					this.showMessage = true;
 				}, this.data.selectedTime * 1000);
 			}
 		},
@@ -255,12 +257,15 @@ export const useCountdown = defineStore({
 			this.sound.loop = true;
 		},
 		stopCountDown() {
+			const CLOCK = useClock();
 			clearInterval(this.intervalTimer);
 			this.data.timeLeft = "00:00";
 			this.data.endTime = 0;
 			this.data.selectedTime = 0;
 			this.sound.pause();
 			this.sound.loop = false;
+			this.showMessage = false;
+			CLOCK.settings.show_countdown = false;
 		},
 	},
 });
@@ -351,6 +356,7 @@ export const useAlarm = defineStore({
 		time_save: 0,
 		timeTag: "",
 		message: "",
+		showMessage: false,
 	}),
 	actions: {
 		AlarmDisplay() {
@@ -389,13 +395,17 @@ export const useAlarm = defineStore({
 		InitAlarm() {
 			this.sound.play();
 			this.sound.loop = true;
+			this.showMessage = true;
 		},
 		StopAlarm() {
+			const CLOCK = useClock();
 			this.sound.pause();
 			this.sound.loop = false;
 			this.sound.currentTime = 0;
 			this.display = false;
 			this.alarm = "Set Alarm";
+			this.showMessage = false;
+			CLOCK.settings.show_alarm = false;
 		},
 		SnoozeAlarm() {
 			this.sound.loop = false;
