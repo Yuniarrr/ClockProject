@@ -6,7 +6,7 @@
   >
     <span class="bg"></span>
     <div>
-      <v-app-bar app color="primary" dark>
+      <v-app-bar app color="blue darken-3" dark>
         <div class="d-flex align-center">
           <v-icon class="shrink mr-2 mt-1" transition="scale-transition" width="40"
             >mdi-clock-digital</v-icon
@@ -24,11 +24,7 @@
         <v-btn target="_blank" text @click="DarkMode()">
           <v-icon>mdi-theme-light-dark</v-icon>
         </v-btn>
-        <v-btn
-          target="_blank"
-          text
-          @click="CLOCK.ToggleSettings() && (overlay = !overlay)"
-        >
+        <v-btn target="_blank" text @click="CLOCK.ToggleSettings()">
           <v-icon>mdi-cog</v-icon>
         </v-btn>
       </v-app-bar>
@@ -48,11 +44,6 @@
       </v-main>
       <PopUpAlarm />
     </div>
-    <!-- <v-overlay
-        :opacity="opacity"
-        :absolute="absolute"
-        :value="overlay"
-      ></v-overlay> -->
   </v-app>
 </template>
 
@@ -95,7 +86,7 @@ export default {
   font-family: "Share Tech Mono", monospace;
 }
 /* .imageBackground {
-  background: url('https://www.itl.cat/pngfile/big/246-2469733_lake-wanaka-new-zealand-17167-wallpaper-beautiful-lakes.jpg')
+  background: url("https://www.itl.cat/pngfile/big/246-2469733_lake-wanaka-new-zealand-17167-wallpaper-beautiful-lakes.jpg")
     no-repeat center center fixed !important;
   background-size: cover;
 } */

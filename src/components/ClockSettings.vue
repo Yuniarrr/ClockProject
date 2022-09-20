@@ -164,37 +164,7 @@
       </v-list-item-content>
     </v-list>
 
-    <!-- <v-divider></v-divider> -->
-
-    <!-- <v-list dense class="mb-n3">
-      <v-list-item-content>
-        <v-list-item-title class="mb-n2"> Change Language </v-list-item-title>
-        <div>
-          <v-radio-group col>
-            <v-radio label="English" value="english"></v-radio>
-            <v-radio label="Indonesia" value="indonesia"></v-radio>
-          </v-radio-group>
-        </div>
-      </v-list-item-content>
-    </v-list>
-
     <v-divider></v-divider> -->
-
-    <!-- <v-list>
-        <v-list-item-content>
-            <v-list-item-title class="mb-n2"> Change Clock Color </v-list-item-title>
-            <div>
-            <v-radio-group col>
-                <v-radio label="Red" value="1"></v-radio>
-                <v-radio label="Blue" value="2"></v-radio>
-                <v-radio label="Green" value="3"></v-radio>
-                <v-radio label="Yellow" value="4"></v-radio>
-                <v-radio label="Purple" value="5"></v-radio>
-                <v-radio label="Orange" value="6"></v-radio>
-            </v-radio-group>
-            </div>
-        </v-list-item-content>
-    </v-list> -->
   </v-sheet>
 </template>
 
@@ -207,56 +177,6 @@ export default {
     return {
       CLOCK,
     };
-  },
-  data() {
-    return {
-      fontSize: [],
-      dateFormat: "",
-    };
-  },
-  methods: {
-    changeFontSize: () => {
-      // let that = this;
-      // let fonts = e.target.value;
-      // console.log(that.fontSize);
-      // let size = this.fontSize;
-      // switch (size) {
-      //   case "small":
-      //     console.log(size);
-      //     // size.style = "3rem";
-      //     break;
-      //   case "medium":
-      //     console.log(size);
-      //     // size.style = "4rem";
-      //     break;
-      //   case "large":
-      //     console.log(size);
-      //     // size.style = "5rem";
-      //     break;
-      //   default:
-      //     break;
-      // }
-    },
-    changeDateFormat() {
-      console.log("change date format");
-    },
-    changeTimeFormat() {
-      console.log("change time format");
-    },
-    changeLanguage() {
-      console.log("change language");
-    },
-    changeClockStyle() {
-      console.log("change clock style");
-    },
-    changeClockColor() {
-      console.log("change clock color");
-    },
-  },
-  created() {
-    // setInterval(() => {
-    //   console.log(this.fontSize);
-    // }, 1000);
   },
 };
 </script>
