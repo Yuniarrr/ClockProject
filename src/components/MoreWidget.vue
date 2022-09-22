@@ -2,7 +2,13 @@
   <v-container>
     <v-row xs="6" sm="6" md="6">
       <v-col>
-        <v-btn target="_blank" text class="mb-2" large @click="CLOCK.ShowAlarms()">
+        <v-btn
+          target="_blank"
+          text
+          class="mb-2"
+          large
+          @click="CLOCK.ShowAlarms()"
+        >
           <v-icon size="50">mdi-clock</v-icon>
         </v-btn>
         <br />
@@ -31,7 +37,9 @@
             <v-btn
               class="mb-3"
               @click="
-                ALARM.alarm === 'Set Alarm' ? ALARM.SetAlarm() : ALARM.CancelAlarm()
+                ALARM.alarm === 'Set Alarm'
+                  ? ALARM.SetAlarm()
+                  : ALARM.CancelAlarm()
               "
             >
               {{ ALARM.alarm }}
@@ -40,13 +48,21 @@
               <v-btn class="mx-1 mb-5" @click="ALARM.SnoozeAlarm()">
                 Snooze for 5s
               </v-btn>
-              <v-btn class="mx-1 mb-5" @click="ALARM.StopAlarm()"> Stop Alarm </v-btn>
+              <v-btn class="mx-1 mb-5" @click="ALARM.StopAlarm()">
+                Stop Alarm
+              </v-btn>
             </div>
           </div>
         </v-card>
       </v-col>
       <v-col>
-        <v-btn target="_blank" text class="mb-2" @click="CLOCK.ShowCountdown()" large>
+        <v-btn
+          target="_blank"
+          text
+          class="mb-2"
+          @click="CLOCK.ShowCountdown()"
+          large
+        >
           <v-icon size="50">mdi-counter</v-icon>
         </v-btn>
         <br />
@@ -88,7 +104,13 @@
         </v-card>
       </v-col>
       <v-col>
-        <v-btn target="_blank" text class="mb-2" @click="CLOCK.ShowStopwatch()" large>
+        <v-btn
+          target="_blank"
+          text
+          class="mb-2"
+          @click="CLOCK.ShowStopwatch()"
+          large
+        >
           <v-icon size="50">mdi-timer</v-icon>
         </v-btn>
         <br />
@@ -98,10 +120,18 @@
             <v-card-text>
               <span>{{ STOPWATCH.time }}</span>
               <br />
-              <v-btn @click="STOPWATCH.StartStopwatch()" class="mx-1">Start</v-btn>
-              <v-btn @click="STOPWATCH.StopStopwatch()" class="mx-1">Stop</v-btn>
-              <v-btn @click="STOPWATCH.ResetStopwatch()" class="mx-1 my-1">Reset</v-btn>
-              <v-btn @click="STOPWATCH.RoundStopwatch()" class="mx-1 my-1">Round</v-btn>
+              <v-btn @click="STOPWATCH.StartStopwatch()" class="mx-1"
+                >Start</v-btn
+              >
+              <v-btn @click="STOPWATCH.StopStopwatch()" class="mx-1"
+                >Stop</v-btn
+              >
+              <v-btn @click="STOPWATCH.ResetStopwatch()" class="mx-1 my-1"
+                >Reset</v-btn
+              >
+              <v-btn @click="STOPWATCH.RoundStopwatch()" class="mx-1 my-1"
+                >Round</v-btn
+              >
               <ul
                 v-if="STOPWATCH.rounds != 0"
                 class="mt-2"
@@ -121,7 +151,12 @@
 </template>
 
 <script>
-import { useClock, useCountdown, useStopwatch, useAlarm } from "@/store/index.js";
+import {
+  useClock,
+  useCountdown,
+  useStopwatch,
+  useAlarm,
+} from "@/store/index.js";
 
 export default {
   setup() {

@@ -8,7 +8,10 @@
     <div>
       <v-app-bar app color="blue darken-3" dark>
         <div class="d-flex align-center">
-          <v-icon class="shrink mr-2 mt-1" transition="scale-transition" width="40"
+          <v-icon
+            class="shrink mr-2 mt-1"
+            transition="scale-transition"
+            width="40"
             >mdi-clock-digital</v-icon
           >
           <span

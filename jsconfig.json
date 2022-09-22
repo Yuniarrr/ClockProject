@@ -6,18 +6,11 @@
     "moduleResolution": "node",
     "jsx": "preserve",
     "paths": {
-      "@/*": [
-        "src/*"
-      ]
+      "@/*": ["src/*"]
     },
-    "lib": [
-      "esnext",
-      "dom",
-      "dom.iterable",
-      "scripthost"
-    ]
+    "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
   },
   "vueCompilerOptions": {
     "experimentalTemplateInterpolationService": true
-  },
+  }
 }
