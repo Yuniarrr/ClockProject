@@ -6,17 +6,15 @@
           class="mx-auto absolute"
           style=""
           :style="{
-            'text-shadow: 0 0 20px rgba(10, 175, 230, 1),  0 0 20px rgba(10, 175, 230, 0);':
-              this.$vuetify.theme.dark,
+            'text-shadow: 0 0 20px rgba(10, 175, 230, 1),  0 0 20px rgba(10, 175, 230, 0);': this
+              .$vuetify.theme.dark,
             '': !this.$vuetify.theme.dark,
           }"
         >
           <v-list-item>
             <v-list-item-content>
               <div class="mx-auto my-auto mb-n3">
-                <DigitalWidget
-                  v-if="CLOCK.settings.clock_style === 'digital'"
-                />
+                <DigitalWidget v-if="CLOCK.settings.clock_style === 'digital'" />
                 <AnalogWidget class="mb-3" v-else />
               </div>
               <div>

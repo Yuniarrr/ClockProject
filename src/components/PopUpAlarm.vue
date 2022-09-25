@@ -4,16 +4,12 @@
       <v-dialog v-model="ALARM.showMessage" max-width="500px">
         <v-card>
           <v-card-title>
-            <span>Alarm</span>
+            <span>Alarm Message:</span>
             <v-spacer></v-spacer>
           </v-card-title>
-          <v-card-text class="text-h6"
-            >Alarm Message: {{ ALARM.message }}</v-card-text
-          >
+          <v-card-text class="text-h6">{{ ALARM.message }}</v-card-text>
           <v-card-actions>
-            <v-btn color="primary" text @click="ALARM.StopAlarm()">
-              Close
-            </v-btn>
+            <v-btn color="primary" text @click="ALARM.StopAlarm()"> Close </v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -25,9 +21,7 @@
           </v-card-title>
           <v-card-text class="text-h6">TIME'S UP</v-card-text>
           <v-card-actions>
-            <v-btn color="primary" text @click="COUNTDOWN.stopCountDown()">
-              Close
-            </v-btn>
+            <v-btn color="primary" text @click="COUNTDOWN.stopCountDown()"> Close </v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>

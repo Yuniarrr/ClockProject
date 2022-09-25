@@ -8,6 +8,7 @@ export const useClock = defineStore({
       date: "",
       time: "",
       fontSize: 4,
+      waktu: ""
     },
     settings: {
       show_settings: false,
@@ -79,6 +80,9 @@ export const useClock = defineStore({
       } else {
         return moment().format("HH:mm:ss");
       }
+    },
+    Time() {
+      return moment().format("a");
     },
     ChangeFontSize() {
       switch (this.settings.font_size) {

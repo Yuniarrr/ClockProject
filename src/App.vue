@@ -8,10 +8,7 @@
     <div>
       <v-app-bar app color="blue darken-3" dark>
         <div class="d-flex align-center">
-          <v-icon
-            class="shrink mr-2 mt-1"
-            transition="scale-transition"
-            width="40"
+          <v-icon class="shrink mr-2 mt-1" transition="scale-transition" width="40"
             >mdi-clock-digital</v-icon
           >
           <span
@@ -57,21 +54,13 @@ import { useClock } from "./store/index.js";
 
 export default {
   name: "App",
-  data: () => ({
-    overlay: false,
-    absolute: true,
-  }),
   setup() {
     const CLOCK = useClock();
     return {
       CLOCK,
     };
   },
-  watch: {
-    overlay(val) {
-      val && this.CLOCK.settings.show_settings;
-    },
-  },
+  watch: {},
   components: {
     ClockSettings,
     PopUpAlarm,
@@ -85,7 +74,8 @@ export default {
 </script>
 
 <style>
-* {
+*,
+#noon {
   font-family: "Share Tech Mono", monospace;
 }
 /* .imageBackground {

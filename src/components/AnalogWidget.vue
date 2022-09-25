@@ -11,7 +11,14 @@
       <span>{{ CLOCK.data.date }}</span>
     </div>
     <div>
-      <Clock color="blue" border="solid" size="200px" />
+      <v-row>
+        <v-col>
+          <Clock color="blue" border="solid" size="200px" />
+          <!-- <span class="text-h2 font-bold ml-4" id="noon">
+            {{ CLOCK.Time().toUpperCase() }}
+          </span> -->
+        </v-col>
+      </v-row>
     </div>
   </v-container>
 </template>

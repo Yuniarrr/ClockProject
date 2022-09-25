@@ -1,16 +1,23 @@
 <template>
   <v-container>
     <div
-      class="mt-4 mb-7"
+      class="mt-4"
       :class="{
-        'text-sm': CLOCK.settings.font_size === 'small',
-        'text-h5': CLOCK.settings.font_size === 'medium',
-        'text-h4': CLOCK.settings.font_size === 'large',
+        'text-sm mb-4': CLOCK.settings.font_size === 'small',
+        'text-h5 mb-7': CLOCK.settings.font_size === 'medium',
+        'text-h4 mb-12': CLOCK.settings.font_size === 'large',
       }"
     >
       <span>{{ CLOCK.data.date }}</span>
     </div>
-    <div class="text-overline mb-4">
+    <div
+      class="text-overline"
+      :class="{
+        'mb-4': CLOCK.settings.font_size === 'small',
+        'mb-4': CLOCK.settings.font_size === 'medium',
+        'my-5': CLOCK.settings.font_size === 'large',
+      }"
+    >
       <span
         :style="{
           'font-size': CLOCK.data.fontSize + 'rem',
