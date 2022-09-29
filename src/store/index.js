@@ -357,20 +357,95 @@ export const useAlarm = defineStore({
     timer: null,
     display: false,
     alarm: "Set Alarm",
-    time_save: 0,
     timeTag: "",
-    message: "",
     showMessage: false,
+    list_alarm: [],
+    getTime: 0,
+    date: "",
+    message: "",
+    selected_audio: null,
+    toggle_alarm: false,
+    audio_alarm: [
+      {
+        name: "Ringtone 1",
+        path: new Audio("https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3")
+      },
+      {
+        name: "Ringtone 2",
+        path: "c",
+      },
+      {
+        name: "Ringtone 3",
+        path: "d",
+      }
+    ],
+    icon_alarm: [
+        {
+          change: false,
+          icon: "mdi-alpha-s-box",
+          value: "Senin",
+        },
+        {
+          change: false,
+          icon: "mdi-alpha-s-box",
+          value: "Selasa",
+        },
+        {
+          change: false,
+          icon: "mdi-alpha-r-box",
+          value: "Rabu",
+        },
+        {
+          change: false,
+          icon: "mdi-alpha-k-box",
+          value: "Kamis",
+        },
+        {
+          change: false,
+          icon: "mdi-alpha-j-box",
+          value: "Jumat",
+        },
+        {
+          change: false,
+          icon: "mdi-alpha-s-box",
+          value: "Sabtu",
+        },
+        {
+          change: false,
+          icon: "mdi-alpha-m-box",
+          value: "Minggu",
+        },
+      ],
   }),
   actions: {
     AlarmDisplay() {
       return (this.display = !this.display);
     },
+    DeleteAlarm(index) {
+      this.list_alarm.splice(index, 1);
+    },
+    AddAlarm() {
+      if (this.getTime !== 0 && this.message !== "") {
+        let list_day = [];
+        // let selected_audio = this.selected_audio.path;
+        // console.log(selected_audio);
+        for (let index = 0; index < this.icon_alarm.length; index++) {
+          if(this.icon_alarm[index].change){
+            list_day.push(this.icon_alarm[index].value);
+          }
+        }
+        const LIST_ALARM = [this.getTime, this.message, this.toggle_alarm, list_day];
+        this.list_alarm.push(LIST_ALARM);
+        console.log(this.list_alarm);
+      } else {
+        console.log("error");
+      }
+    },
     SetAlarm() {
       let ms =
         new Date().setHours(0, 0, 0, 0) +
-        this.time_save.slice(0, 2) * 3600000 +
-        this.time_save.slice(3, 5) * 60000;
+        this.getTime.slice(0, 2) * 3600000 +
+        this.getTime.slice(3, 5) * 60000;
       if (isNaN(ms)) {
         alert("You've got to give me something to work with here, friend.");
         return;
