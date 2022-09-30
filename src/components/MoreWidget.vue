@@ -24,13 +24,6 @@
               id="alarmTime"
               v-model="ALARM.getTime"
             ></v-text-field>
-            <!-- <v-text-field
-              label="Date"
-              type="date"
-              prepend-icon="mdi-calendar"
-              class="mb-n3"
-              v-model="ALARM.date"
-            ></v-text-field> -->
             <v-text-field
               label="Message"
               type="text"
@@ -40,19 +33,37 @@
             ></v-text-field>
             <input type="hidden" v-model="ALARM.toggle_alarm" />
             <v-select
-              v-model="selected_audio"
               :items="ALARM.audio_alarm"
               item-text="name"
               item-value="path"
+              value="name"
               label="Select"
               persistent-hint
               return-object
               single-line
+              class="mb-n5"
+              @change="ALARM.onItemChange($event)"
               prepend-icon="mdi-book-music"
             ></v-select>
+            <v-radio-group class="mb-n3" v-model="ALARM.repeat" column label="Repeat">
+              <v-radio label="Once" value="once"></v-radio>
+              <v-radio label="Everyday" value="everyday"></v-radio>
+              <v-radio label="Choose Day" value="day"></v-radio>
+              <v-radio label="Choose Date" value="date"></v-radio>
+            </v-radio-group>
+            <v-text-field
+              v-if="ALARM.repeat === 'date'"
+              label="Date"
+              type="date"
+              prepend-icon="mdi-calendar"
+              v-model="ALARM.date"
+            ></v-text-field>
             <!-- <v-select :items="items" v-model="value" label="label"></v-select> -->
           </v-card-title>
-          <div class="d-flex flex-row justify-space-around mb-5 px-5">
+          <div
+            class="d-flex flex-row justify-space-around mb-5 px-5"
+            v-if="ALARM.repeat == 'day'"
+          >
             <v-icon
               v-for="(icons, index) in ALARM.icon_alarm"
               :key="index"
@@ -108,11 +119,16 @@
                         style="cursor: pointer"
                       >
                         <p class="text-body-1 mb-n1">{{ alarm[0] }}</p>
-                        <p class="text-body-2">Message: {{ alarm[2] }}</p>
+                        <p class="text-body-2">Message: {{ alarm[1] }}</p>
                       </v-list-item-title>
                       <!-- </v-hover> -->
                       <v-list-item-action class="">
-                        <v-switch v-model="alarm[3]"></v-switch>
+                        <v-switch
+                          v-model="alarm[3]"
+                          @click="
+                            alarm[3] ? ALARM.SetAlarm(index) : ALARM.CancelAlarm(index)
+                          "
+                        ></v-switch>
                       </v-list-item-action>
                     </v-list-item>
                   </v-list>
