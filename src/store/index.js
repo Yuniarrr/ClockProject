@@ -1,5 +1,10 @@
 import { defineStore } from "pinia";
 import moment from "moment";
+import ringtone_1 from "../assets/ringtone_1.mp3"
+import ringtone_2 from "../assets/ringtone_2.mp3"
+import ringtone_3 from "../assets/ringtone_3.mp3"
+import ringtone_4 from "../assets/ringtone_4.mp3"
+import ringtone_5 from "../assets/ringtone_5.mp3"
 
 export const useClock = defineStore({
 	id: "clock",
@@ -376,12 +381,24 @@ export const useAlarm = defineStore({
 			},
 			{
 				name: "Ringtone 2",
-				path: "c",
+				path: new Audio(ringtone_1),
 			},
 			{
 				name: "Ringtone 3",
-				path: "d",
+				path: new Audio(ringtone_2),
 			},
+			{
+				name: "Ringtone 4",
+				path: new Audio(ringtone_3),
+			},
+			{
+				name: "Ringtone 5",
+				path: new Audio(ringtone_4),
+			},
+			{
+				name: "Ringtone 6",
+				path: new Audio(ringtone_5),
+			}
 		],
 		icon_alarm: [
 			{
@@ -576,11 +593,14 @@ export const useAlarm = defineStore({
 			CLOCK.settings.show_alarm = false;
 		},
 		SnoozeAlarm() {
+			this.showMessage = false;
 			this.sound.loop = false;
 			this.sound.pause();
 			this.sound.currentTime = 0;
 			this.timer = setTimeout(() => {
-				this.InitAlarm();
+				this.sound.play();
+				this.sound.loop = true;
+				this.showMessage = true;
 			}, 5000);
 		},
 	},

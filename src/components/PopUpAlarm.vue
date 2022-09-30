@@ -8,9 +8,11 @@
             <v-spacer></v-spacer>
           </v-card-title>
           <v-card-text class="text-h6">{{ ALARM.message }}</v-card-text>
-          <v-card-actions>
+          <v-card-actions class="flex justify-space-around">
             <v-btn color="primary" text @click="ALARM.StopAlarm()"> Close </v-btn>
-            <!-- <v-btn color="primary" text @click="ALARM.SnoozeAlarm()"> Snooze </v-btn> -->
+            <v-btn color="primary" text @click="ALARM.SnoozeAlarm()">
+              Snooze For 5s
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>

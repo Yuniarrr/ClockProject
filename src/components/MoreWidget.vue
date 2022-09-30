@@ -58,7 +58,6 @@
               prepend-icon="mdi-calendar"
               v-model="ALARM.date"
             ></v-text-field>
-            <!-- <v-select :items="items" v-model="value" label="label"></v-select> -->
           </v-card-title>
           <div
             class="d-flex flex-row justify-space-around mb-5 px-5"
@@ -79,20 +78,6 @@
           <div>
             <div class="d-flex flex-row align-center justify-space-around">
               <v-btn class="mb-3" @click="ALARM.AddAlarm()"> Add Alarm </v-btn>
-              <v-btn
-                class="mb-3"
-                @click="
-                  ALARM.alarm === 'Set Alarm' ? ALARM.SetAlarm() : ALARM.CancelAlarm()
-                "
-              >
-                {{ ALARM.alarm }}
-              </v-btn>
-            </div>
-            <div v-if="ALARM.display">
-              <v-btn class="mx-1 mb-5" @click="ALARM.SnoozeAlarm()">
-                Snooze for 5s
-              </v-btn>
-              <v-btn class="mx-1 mb-5" @click="ALARM.StopAlarm()"> Stop Alarm </v-btn>
             </div>
             <div
               class="overflow-auto"
@@ -102,10 +87,6 @@
                   0 6px 20px 0 rgba(0, 0, 0, 0.19);
               "
             >
-              <!-- <v-card>
-                <v-card-title>Alarm 1</v-card-title>
-                <v-switch></v-switch>
-              </v-card> -->
               <div v-for="(alarm, index) in ALARM.list_alarm" :key="index">
                 <v-card class="d-flex flex-column align-stretch pr-4">
                   <v-list>
@@ -113,7 +94,6 @@
                       <v-btn @click="ALARM.DeleteAlarm(index)">
                         <v-icon>mdi-trash-can</v-icon>
                       </v-btn>
-                      <!-- <v-hover> -->
                       <v-list-item-title
                         class="hover-overlay align-center d-flex flex-column my-auto"
                         style="cursor: pointer"
@@ -121,7 +101,6 @@
                         <p class="text-body-1 mb-n1">{{ alarm[0] }}</p>
                         <p class="text-body-2">Message: {{ alarm[1] }}</p>
                       </v-list-item-title>
-                      <!-- </v-hover> -->
                       <v-list-item-action class="">
                         <v-switch
                           v-model="alarm[3]"
