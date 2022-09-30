@@ -173,6 +173,7 @@ export const useClock = defineStore({
 			}
 		},
 	},
+	persist: true,
 });
 
 export const useCountdown = defineStore({
@@ -277,6 +278,7 @@ export const useCountdown = defineStore({
 			CLOCK.settings.show_countdown = false;
 		},
 	},
+	// persist: true,
 });
 
 export const useStopwatch = defineStore({
@@ -351,6 +353,7 @@ export const useStopwatch = defineStore({
 			this.rounds.push(this.time);
 		},
 	},
+	// persist: true,
 });
 
 export const useAlarm = defineStore({
@@ -367,7 +370,7 @@ export const useAlarm = defineStore({
 		repeat: "",
 		difference_time: 0,
 		list_alarm: [],
-		getTime: 0,
+		getTime: "",
 		date: "",
 		message: "",
 		selected_audio: "",
@@ -468,6 +471,15 @@ export const useAlarm = defineStore({
 			} else {
 				console.log("error");
 			}
+			this.getTime = "";
+			this.message = "";
+			this.selected_audio = "";
+			this.toggle_alarm = false;
+			this.date = "";
+			this.icon_alarm.forEach((element) => {
+				element.change = false;
+			});
+			this.repeat = "";
 		},
 		CheckDay(index) {
 			let day = moment().day();
@@ -604,4 +616,13 @@ export const useAlarm = defineStore({
 			}, 5000);
 		},
 	},
+	// persist: {
+	// 	path: ["list_alarm"],
+	// 	beforeRestore: (state) => {
+	// 		state.sound = state.selected_audio;
+	// 	},
+	// 	afterRestore: (state) => {
+	// 		state.sound = state.selected_audio;
+	// 	}
+	// },
 });
