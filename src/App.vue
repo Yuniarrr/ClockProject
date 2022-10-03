@@ -8,7 +8,10 @@
     <div>
       <v-app-bar app color="blue darken-3" dark>
         <div class="d-flex align-center">
-          <v-icon class="shrink mr-2 mt-1" transition="scale-transition" width="40"
+          <v-icon
+            class="shrink mr-2 mt-1"
+            transition="scale-transition"
+            width="40"
             >mdi-clock-digital</v-icon
           >
           <span
@@ -50,14 +53,16 @@
 <script>
 import ClockSettings from "./components/ClockSettings.vue";
 import PopUpAlarm from "./components/PopUpAlarm.vue";
-import { useClock } from "./store/index.js";
+import { useClock, useCountdown } from "./store/index.js";
 
 export default {
   name: "App",
   setup() {
     const CLOCK = useClock();
+    const COUNTDOWN = useCountdown();
     return {
       CLOCK,
+      COUNTDOWN,
     };
   },
   watch: {},
@@ -69,6 +74,33 @@ export default {
     DarkMode() {
       return (this.$vuetify.theme.dark = !this.$vuetify.theme.dark);
     },
+  },
+  watch: {
+    ALARM: {
+      handler() {
+        ALARM.list_alarm.forEach((alarm) => {
+          if (alarm[3]) {
+            alarm.SetAlarm(alarm);
+          }
+        });
+      },
+    },
+    "COUNTDOWN.data.selectedTime": {
+      handler() {
+        let countdown = this.COUNTDOWN;
+        if (countdown.data.selectedTime != 0) {
+          countdown.setTime(countdown.data.selectedTime);
+        }
+      },
+      deep: true,
+    },
+  },
+  created() {
+    let countdown = this.COUNTDOWN;
+    if (countdown.data.selectedTime != 0) {
+      countdown.setTime(countdown.data.selectedTime);
+    }
+    console.log(this.COUNTDOWN.data.selectedTime);
   },
 };
 </script>
