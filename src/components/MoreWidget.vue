@@ -41,7 +41,6 @@
             <v-select
               :items="ALARM.audio_alarm"
               item-text="name"
-              item-value="path"
               value="name"
               label="Select"
               persistent-hint
@@ -208,18 +207,20 @@
             <v-card-text>
               <span>{{ STOPWATCH.time }}</span>
               <br />
-              <v-btn @click="STOPWATCH.StartStopwatch()" class="mx-1"
-                >Start</v-btn
-              >
-              <v-btn @click="STOPWATCH.StopStopwatch()" class="mx-1"
-                >Stop</v-btn
-              >
-              <v-btn @click="STOPWATCH.ResetStopwatch()" class="mx-1 my-1"
-                >Reset</v-btn
-              >
-              <v-btn @click="STOPWATCH.RoundStopwatch()" class="mx-1 my-1"
-                >Round</v-btn
-              >
+              <div class="d-flex flex-wrap justify-center">
+                <v-btn @click="STOPWATCH.StartStopwatch()" class="mx-1 my-1"
+                  >Start</v-btn
+                >
+                <v-btn @click="STOPWATCH.StopStopwatch()" class="mx-1 my-1"
+                  >Stop</v-btn
+                >
+                <v-btn @click="STOPWATCH.ResetStopwatch()" class="mx-1 my-1"
+                  >Reset</v-btn
+                >
+                <v-btn @click="STOPWATCH.RoundStopwatch()" class="mx-1 my-1"
+                  >Round</v-btn
+                >
+              </div>
               <ul
                 v-if="STOPWATCH.rounds != 0"
                 class="mt-2"

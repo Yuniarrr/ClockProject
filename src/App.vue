@@ -53,16 +53,18 @@
 <script>
 import ClockSettings from "./components/ClockSettings.vue";
 import PopUpAlarm from "./components/PopUpAlarm.vue";
-import { useClock, useCountdown } from "./store/index.js";
+import { useClock, useCountdown, useAlarm } from "./store/index.js";
 
 export default {
   name: "App",
   setup() {
     const CLOCK = useClock();
     const COUNTDOWN = useCountdown();
+    const ALARM = useAlarm();
     return {
       CLOCK,
       COUNTDOWN,
+      ALARM,
     };
   },
   watch: {},
@@ -75,32 +77,22 @@ export default {
       return (this.$vuetify.theme.dark = !this.$vuetify.theme.dark);
     },
   },
-  watch: {
-    ALARM: {
-      handler() {
-        ALARM.list_alarm.forEach((alarm) => {
-          if (alarm[3]) {
-            alarm.SetAlarm(alarm);
-          }
-        });
-      },
-    },
-    "COUNTDOWN.data.selectedTime": {
-      handler() {
-        let countdown = this.COUNTDOWN;
-        if (countdown.data.selectedTime != 0) {
-          countdown.setTime(countdown.data.selectedTime);
-        }
-      },
-      deep: true,
-    },
-  },
   created() {
     let countdown = this.COUNTDOWN;
     if (countdown.data.selectedTime != 0) {
       countdown.setTime(countdown.data.selectedTime);
     }
-    console.log(this.COUNTDOWN.data.selectedTime);
+    let alarms = this.ALARM;
+    if (alarms.list_alarm.length > 0) {
+      for (let i = 0; i < alarms.list_alarm.length; i++) {
+        console.log(alarms.list_alarm[i][3]);
+        console.log(alarms.list_alarm[i]);
+        if (alarms.list_alarm[i][3]) {
+          alarms.SetAlarm(i);
+        }
+      }
+    }
+    // console.log(this.COUNTDOWN.data.selectedTime);
   },
 };
 </script>

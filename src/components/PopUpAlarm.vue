@@ -9,7 +9,7 @@
           </v-card-title>
           <v-card-text class="text-h6">{{ ALARM.message }}</v-card-text>
           <v-card-actions class="flex justify-space-around">
-            <v-btn color="primary" text @click="ALARM.StopAlarm()">
+            <v-btn color="primary" text @click="ALARM.StopAlarm(ALARM.index)">
               Close
             </v-btn>
             <v-btn color="primary" text @click="ALARM.SnoozeAlarm()">

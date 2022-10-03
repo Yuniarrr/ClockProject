@@ -359,17 +359,16 @@ export const useStopwatch = defineStore({
 export const useAlarm = defineStore({
   id: "alarm",
   state: () => ({
-    sound: new Audio(
-      "https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"
-    ),
+    sound: new Audio(),
     timer: null,
     display: false,
     timeTag: "",
     showMessage: false,
     repeat: "",
     difference_time: 0,
-    list_alarm: [],
+    list_alarm: useStorage("alarm", []),
     getTime: "",
+    index: 9999,
     date: "",
     message: "",
     selected_audio: "",
@@ -448,7 +447,7 @@ export const useAlarm = defineStore({
       this.list_alarm.splice(index, 1);
     },
     onItemChange(e) {
-      this.selected_audio = e.path;
+      this.selected_audio = e.path.currentSrc;
     },
     AddAlarm() {
       if (this.getTime !== 0 && this.message !== "") {
@@ -524,26 +523,32 @@ export const useAlarm = defineStore({
         const REPEAT = this.list_alarm[index][7];
         if (REPEAT === "once") {
           console.log("alarm hanya sekali");
-          this.message = this.list_alarm[index][1];
           this.SetAlarmTime(index);
           this.timer = setTimeout(() => {
+            this.message = this.list_alarm[index][1];
+            this.list_alarm[index][6] = true;
             this.InitAlarm(index);
             this.list_alarm[index][3] = false;
+            this.index = index;
           }, this.difference_time);
         } else if (REPEAT === "everyday") {
           console.log("alarm setiap");
-          this.message = this.list_alarm[index][1];
           this.SetAlarmTime(index);
           this.timer = setTimeout(() => {
+            this.message = this.list_alarm[index][1];
+            this.list_alarm[index][6] = true;
             this.InitAlarm(index);
+            this.index = index;
           }, this.difference_time);
         } else if (REPEAT === "day") {
           if (this.CheckDay(index)) {
             console.log("alarm untuk hari ini");
-            this.message = this.list_alarm[index][1];
             this.SetAlarmTime(index);
             this.timer = setTimeout(() => {
+              this.message = this.list_alarm[index][1];
+              this.list_alarm[index][6] = true;
               this.InitAlarm(index);
+              this.index = index;
             }, this.difference_time);
           }
         } else if (REPEAT === "date") {
@@ -556,10 +561,12 @@ export const useAlarm = defineStore({
           let local_date = `${year}-${month}-${day}`;
           if (this.list_alarm[index][5] === local_date) {
             console.log("alarm untuk tanggal ini");
-            this.message = this.list_alarm[index][1];
             this.SetAlarmTime(index);
             this.timer = setTimeout(() => {
+              this.message = this.list_alarm[index][1];
+              this.list_alarm[index][6] = true;
               this.InitAlarm(index);
+              this.index = index;
             }, this.difference_time);
           }
         }
@@ -583,7 +590,7 @@ export const useAlarm = defineStore({
         this.showMessage = true;
         setTimeout(() => {
           this.showMessage = false;
-        }, 3000);
+        }, 2000);
         return;
       }
       this.display = true;
@@ -593,15 +600,18 @@ export const useAlarm = defineStore({
       this.display = false;
     },
     InitAlarm(index) {
-      this.sound = this.list_alarm[index][2];
-      this.sound.play();
+      this.sound.src = this.list_alarm[index][2];
       this.sound.loop = true;
-      this.showMessage = true;
+      this.sound.muted = false;
+      this.sound.play();
+      this.showMessage = this.list_alarm[index][6];
       // popup msg ga muncul mskpn true
       this.list_alarm[index][6] = true;
     },
-    StopAlarm() {
+    StopAlarm(index) {
+      this.list_alarm[index][6] = false;
       const CLOCK = useClock();
+      console.log(this.index);
       this.sound.pause();
       this.message = "";
       this.sound.loop = false;
@@ -682,20 +692,4 @@ export const useAlarm = defineStore({
       return `${day} ${month} ${year}`;
     },
   },
-  // persist: {
-  // 	// path: ["list_alarm", "selected_audio", "repeat", "difference_time"],
-  // 	storage: window.localStorage,
-  // 	beforeRestore: (state) => {
-  // 		console.log("before restore");
-  // 		state.sound = state.selected_audio;
-  // 	},
-  // 	beforeRestore: (state) => {
-  // 		console.log("after restore");
-  // 		state.sound = state.selected_audio;
-  // 	},
-  // 	afterRestore: (state) => {
-  // 		state.sound = state.selected_audio;
-  // 	}
-
-  // },
 });
