@@ -41,7 +41,7 @@
             <v-select
               :items="ALARM.audio_alarm"
               item-text="name"
-              value="name"
+              value="path"
               label="Select"
               persistent-hint
               return-object
@@ -88,6 +88,13 @@
           <div>
             <div class="d-flex flex-row align-center justify-space-around">
               <v-btn class="mb-3" @click="ALARM.AddAlarm()"> Add Alarm </v-btn>
+              <v-btn
+                class="mb-3"
+                v-if="ALARM.sound.onplay"
+                @click="CLOCK.StopAlarm()"
+              >
+                Stop Alarm
+              </v-btn>
             </div>
             <div
               class="overflow-auto"
@@ -101,7 +108,7 @@
                 <v-card class="d-flex flex-column align-stretch pr-4">
                   <v-list>
                     <v-list-item>
-                      <v-btn @click="ALARM.DeleteAlarm(index)">
+                      <v-btn @click="ALARM.DeleteAlarm(index)" class="mt-n5">
                         <v-icon>mdi-trash-can</v-icon>
                       </v-btn>
                       <v-list-item-title
@@ -122,9 +129,12 @@
                           <p class="text-body-2" v-if="alarm[7] == 'date'">
                             {{ ALARM.DateFormat(alarm[5]) }}
                           </p>
+                          <p class="text-body-2" v-if="alarm[7] == 'once'">
+                            Once
+                          </p>
                         </div>
                       </v-list-item-title>
-                      <v-list-item-action class="">
+                      <v-list-item-action class="mt-n1">
                         <v-switch
                           v-model="alarm[3]"
                           @click="
@@ -262,6 +272,23 @@ export default {
       STOPWATCH,
       ALARM,
     };
+  },
+  watch: {
+    "ALARM.list_alarm": {
+      handler() {
+        for (let i = 0; i < this.ALARM.list_alarm.length; i++) {
+          if (this.ALARM.list_alarm[i][3]) {
+            this.showMessage = true;
+            this.message = "alarm has been set";
+            setTimeout(() => {
+              this.message = "";
+              this.showMessage = false;
+            }, 700);
+          }
+        }
+      },
+      deep: true,
+    },
   },
 };
 </script>

@@ -54,6 +54,7 @@
 import ClockSettings from "./components/ClockSettings.vue";
 import PopUpAlarm from "./components/PopUpAlarm.vue";
 import { useClock, useCountdown, useAlarm } from "./store/index.js";
+import moment from "moment";
 
 export default {
   name: "App",
@@ -78,6 +79,7 @@ export default {
     },
   },
   created() {
+    let date = moment().format("HH:mm:ss");
     let countdown = this.COUNTDOWN;
     if (countdown.data.selectedTime != 0) {
       countdown.setTime(countdown.data.selectedTime);
@@ -85,14 +87,20 @@ export default {
     let alarms = this.ALARM;
     if (alarms.list_alarm.length > 0) {
       for (let i = 0; i < alarms.list_alarm.length; i++) {
-        console.log(alarms.list_alarm[i][3]);
-        console.log(alarms.list_alarm[i]);
+        if (date > alarms.list_alarm[i][0] + ":00") {
+          const REPEAT = alarms.list_alarm[i][7];
+          if (REPEAT === "once") {
+            alarms.list_alarm[i][3] = false;
+          }
+        }
         if (alarms.list_alarm[i][3]) {
           alarms.SetAlarm(i);
         }
+        if (alarms.snooze_diff != 0) {
+          alarms.SnoozeAlarm(i);
+        }
       }
     }
-    // console.log(this.COUNTDOWN.data.selectedTime);
   },
 };
 </script>

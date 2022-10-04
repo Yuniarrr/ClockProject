@@ -1,19 +1,29 @@
 <template>
   <div>
     <v-row justify="center">
-      <v-dialog v-model="ALARM.showMessage" max-width="500px">
+      <v-dialog
+        v-model="ALARM.showMessage"
+        max-width="500px"
+        :class="{ 'position-fixed': ALARM.showMessage, '': !ALARM.showMessage }"
+      >
         <v-card>
           <v-card-title>
             <span>Alarm Message:</span>
             <v-spacer></v-spacer>
           </v-card-title>
           <v-card-text class="text-h6">{{ ALARM.message }}</v-card-text>
-          <v-card-actions class="flex justify-space-around">
+          <v-card-actions
+            class="flex justify-space-around"
+            v-if="
+              ALARM.message !== 'alarm has been set' &&
+              ALARM.message !== 'Input the time and message'
+            "
+          >
             <v-btn color="primary" text @click="ALARM.StopAlarm(ALARM.index)">
               Close
             </v-btn>
-            <v-btn color="primary" text @click="ALARM.SnoozeAlarm()">
-              Snooze For 5s
+            <v-btn color="primary" text @click="ALARM.SnoozeAlarm(ALARM.index)">
+              Snooze For 10s
             </v-btn>
           </v-card-actions>
         </v-card>

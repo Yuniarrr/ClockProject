@@ -353,7 +353,6 @@ export const useStopwatch = defineStore({
       this.rounds.push(this.time);
     },
   },
-  // persist: true,
 });
 
 export const useAlarm = defineStore({
@@ -364,7 +363,7 @@ export const useAlarm = defineStore({
     display: false,
     timeTag: "",
     showMessage: false,
-    repeat: "",
+    repeat: "once",
     difference_time: 0,
     list_alarm: useStorage("alarm", []),
     getTime: "",
@@ -438,6 +437,7 @@ export const useAlarm = defineStore({
         value: "Minggu",
       },
     ],
+    snooze_diff: 0,
   }),
   actions: {
     AlarmDisplay() {
@@ -469,18 +469,14 @@ export const useAlarm = defineStore({
           popup,
           repeat,
         ];
-        const ALARM = {
-          time: this.getTime,
-          message: this.message,
-          audio: this.selected_audio,
-          toggle: this.toggle_alarm,
-          day: list_day,
-          date: this.date,
-          popup: false,
-        };
         this.list_alarm.push(LIST_ALARM);
       } else {
-        console.log("error");
+        this.showMessage = true;
+        this.message = "Input the time and message";
+        setTimeout(() => {
+          this.message = "";
+          this.showMessage = false;
+        }, 1000);
       }
     },
     CheckDay(index) {
@@ -521,51 +517,64 @@ export const useAlarm = defineStore({
     SetAlarm(index) {
       if (this.list_alarm[index][3]) {
         const REPEAT = this.list_alarm[index][7];
+        const MSG = this.list_alarm[index][1];
         if (REPEAT === "once") {
-          console.log("alarm hanya sekali");
           this.SetAlarmTime(index);
           this.timer = setTimeout(() => {
-            this.message = this.list_alarm[index][1];
-            this.list_alarm[index][6] = true;
+            if (MSG) {
+              this.message = MSG;
+            } else {
+              this.message = "Alarm";
+            }
             this.InitAlarm(index);
             this.list_alarm[index][3] = false;
+            this.showMessage = true;
             this.index = index;
           }, this.difference_time);
         } else if (REPEAT === "everyday") {
-          console.log("alarm setiap");
           this.SetAlarmTime(index);
           this.timer = setTimeout(() => {
-            this.message = this.list_alarm[index][1];
-            this.list_alarm[index][6] = true;
+            if (MSG) {
+              this.message = MSG;
+            } else {
+              this.message = "Alarm";
+            }
             this.InitAlarm(index);
+            this.showMessage = true;
             this.index = index;
           }, this.difference_time);
         } else if (REPEAT === "day") {
           if (this.CheckDay(index)) {
-            console.log("alarm untuk hari ini");
             this.SetAlarmTime(index);
             this.timer = setTimeout(() => {
-              this.message = this.list_alarm[index][1];
-              this.list_alarm[index][6] = true;
+              if (MSG) {
+                this.message = MSG;
+              } else {
+                this.message = "Alarm";
+              }
               this.InitAlarm(index);
+              this.showMessage = true;
               this.index = index;
             }, this.difference_time);
           }
         } else if (REPEAT === "date") {
-          console.log("atas");
           let date = new Date();
-          let day = date.getDate();
+          let getDay = date.getDate();
+          let day = getDay < 10 ? "0" + getDay : getDay;
           let getMonth = date.getMonth() + 1;
           let month = getMonth < 10 ? "0" + getMonth : getMonth;
           let year = date.getFullYear();
           let local_date = `${year}-${month}-${day}`;
           if (this.list_alarm[index][5] === local_date) {
-            console.log("alarm untuk tanggal ini");
             this.SetAlarmTime(index);
             this.timer = setTimeout(() => {
-              this.message = this.list_alarm[index][1];
-              this.list_alarm[index][6] = true;
+              if (MSG) {
+                this.message = MSG;
+              } else {
+                this.message = "Alarm";
+              }
               this.InitAlarm(index);
+              this.showMessage = true;
               this.index = index;
             }, this.difference_time);
           }
@@ -581,46 +590,64 @@ export const useAlarm = defineStore({
         alert("You've got to give me something to work with here, friend.");
         return;
       }
-      let alarm = new Date(ms);
-      var dt = new Date().getTime();
-      this.difference_time = alarm.getTime() - dt;
-      // cek: lebih baik dikasih atau tidak
+      let alarm = moment(new Date(ms));
+      let dt = moment(new Date().getTime()).valueOf();
+      this.difference_time = alarm.valueOf() - dt;
+
       if (this.difference_time < 0) {
-        this.message = "Enter valid time";
-        this.showMessage = true;
-        setTimeout(() => {
-          this.showMessage = false;
-        }, 2000);
-        return;
+        let new_dt = moment().add(1, "d").valueOf();
+        this.difference_time = new_dt - alarm.valueOf();
       }
       this.display = true;
+    },
+    OnAlarm() {
+      this.showMessage = true;
+      this.message = "alarm has been set";
+      setTimeout(() => {
+        this.message = "";
+        this.showMessage = false;
+      }, 700);
     },
     CancelAlarm(index) {
       clearTimeout(this.timer);
       this.display = false;
+      this.list_alarm[index][3] = false;
     },
     InitAlarm(index) {
-      this.sound.src = this.list_alarm[index][2];
+      if (this.list_alarm[index][2]) {
+        this.sound.src = this.list_alarm[index][2];
+      } else {
+        this.sound.src = ringtone_1;
+      }
       this.sound.loop = true;
       this.sound.muted = false;
       this.sound.play();
-      this.showMessage = this.list_alarm[index][6];
-      // popup msg ga muncul mskpn true
-      this.list_alarm[index][6] = true;
     },
     StopAlarm(index) {
       this.list_alarm[index][6] = false;
       const CLOCK = useClock();
-      console.log(this.index);
       this.sound.pause();
       this.message = "";
+      this.getTime = "";
       this.sound.loop = false;
       this.sound.currentTime = 0;
       this.display = false;
       this.showMessage = false;
+      this.repeat = "once";
       CLOCK.settings.show_alarm = false;
     },
-    SnoozeAlarm() {
+    SnoozeAlarm(index) {
+      let input_time = this.list_alarm[index][0];
+      input_time = moment().add(10, "s").format("HH:mm:ss").valueOf();
+      let next_time =
+        new Date().setHours(0, 0, 0, 0) +
+        input_time.slice(0, 2) * 3600000 +
+        input_time.slice(3, 5) * 60000 +
+        input_time.slice(6, 8) * 1000;
+      let next = moment(new Date(next_time).getTime()).valueOf();
+      let now = moment(new Date().getTime());
+      this.snooze_diff = next - now;
+      useStorage("snooze", this.snooze_diff);
       this.showMessage = false;
       this.sound.loop = false;
       this.sound.pause();
@@ -629,7 +656,7 @@ export const useAlarm = defineStore({
         this.sound.play();
         this.sound.loop = true;
         this.showMessage = true;
-      }, 5000);
+      }, this.snooze_diff);
     },
     DateFormat(item) {
       let date = item;
